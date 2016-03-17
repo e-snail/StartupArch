@@ -11,18 +11,18 @@
 
 
 #### 引入的第三方库
-##### 依赖注入
+##### --依赖注入
 [dagger2](http://google.github.io/dagger/)
 
-##### 网络模块
+##### --网络模块
 [okhttp3](https://github.com/square/okhttp)
 [retrofit 2](https://github.com/square/retrofit)
 
-##### EventBus
+##### --EventBus
 [otto](http://square.github.io/otto/)
 
-##### 数据库
+##### --数据库
 [greenDAO](https://github.com/greenrobot/greenDAO)
 
-#### 扩展阅读
+#### --扩展阅读
 《Tasting Dagger 2 on Android》[原文](http://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/) [译文](http://www.jianshu.com/p/c310618b23a6)
