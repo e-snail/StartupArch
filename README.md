@@ -13,7 +13,8 @@
 #### 引入的第三方库
 ##### 依赖注入
 [dagger2](http://google.github.io/dagger/)
-我翻译的一篇关于dagger2的文章  [原文](http://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/) [译文](http://www.jianshu.com/p/c310618b23a6)
+
+《Tasting Dagger 2 on Android》[原文](http://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/) [译文](http://www.jianshu.com/p/c310618b23a6)
 
 ##### 网络模块
 [okhttp3](https://github.com/square/okhttp)
