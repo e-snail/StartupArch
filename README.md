@@ -24,5 +24,6 @@
 ##### --数据库
 [greenDAO](https://github.com/greenrobot/greenDAO)
 
-#### --扩展阅读
+
+#### 扩展阅读
 《Tasting Dagger 2 on Android》[原文](http://fernandocejas.com/2015/04/11/tasting-dagger-2-on-android/) [译文](http://www.jianshu.com/p/c310618b23a6)
