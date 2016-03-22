@@ -6,6 +6,7 @@ import dagger.Component;
 
 /**
  * Created by wuyongbo on 16-3-22.
+ *
  * Activity级别的Component必须扩展这个Component
  *
  * 说明1:
