@@ -2,6 +2,7 @@ package roff.startuparch.core.component;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import roff.startuparch.core.di.component.ApplicationComponent;
@@ -12,7 +13,7 @@ import roff.startuparch.core.di.component.ApplicationComponentProvider;
  *
  * 所有Activity的基类, 提供常用的方法
  */
-public class BaseActivity extends Activity {
+public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

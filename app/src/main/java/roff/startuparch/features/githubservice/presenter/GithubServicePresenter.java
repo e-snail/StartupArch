@@ -10,6 +10,7 @@ import roff.startuparch.features.githubservice.beans.GithubUserRepo;
 import roff.startuparch.features.githubservice.model.GithubService;
 import roff.startuparch.features.githubservice.view.IGithubServiceView;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -37,7 +38,7 @@ public class GithubServicePresenter implements IGithubServicePresenter{
          */
         githubService.userRepos(user)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())     //TO Crash
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<GithubUserRepo>>() {
                     @Override
                     public void onCompleted() {

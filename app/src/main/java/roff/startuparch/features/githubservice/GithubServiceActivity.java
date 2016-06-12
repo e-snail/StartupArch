@@ -1,19 +1,17 @@
 package roff.startuparch.features.githubservice;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
-import butterknife.OnClick;
 import roff.startuparch.R;
 import roff.startuparch.core.component.BaseActivity;
 import roff.startuparch.core.di.module.ActivityModule;
 import roff.startuparch.features.githubservice.di.DaggerGithubServiceComponent;
 import roff.startuparch.features.githubservice.di.GithubServiceComponent;
 import roff.startuparch.features.githubservice.presenter.IGithubServicePresenter;
-import roff.startuparch.features.githubservice.view.GithubServiceView;
-import roff.startuparch.features.githubservice.view.IGithubServiceView;
+import roff.startuparch.features.githubservice.view.GithubServiceFragment;
 
 /**
  * Created by wuyongbo on 16-6-8.
@@ -24,10 +22,21 @@ public class GithubServiceActivity extends BaseActivity {
 
     @Inject IGithubServicePresenter githubServicePresenter;
 
+    GithubServiceFragment githubServiceFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.githubservice);
+
+        githubServiceFragment = (GithubServiceFragment) getSupportFragmentManager().findFragmentById(R.id.githubservice_fragment);
+        if (githubServiceFragment == null) {
+            githubServiceFragment = new GithubServiceFragment();
+        }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.githubservice_fragment, githubServiceFragment);
+        transaction.commit();
 
         injectComponents();
 
@@ -38,14 +47,12 @@ public class GithubServiceActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        //FIXME move following to View
         githubServicePresenter.getUserInfo("e-snail");
         githubServicePresenter.getUserRepos("e-snail");
     }
 
     private void setupViewPresenter() {
-        IGithubServiceView githubServiceView = new GithubServiceView();
-        githubServicePresenter.setIGithubServiceView(githubServiceView);
+        githubServicePresenter.setIGithubServiceView(githubServiceFragment);
     }
 
     private void injectComponents() {
@@ -61,10 +68,5 @@ public class GithubServiceActivity extends BaseActivity {
         }
 
         return githubServiceComponent;
-    }
-
-    @OnClick(R.id.user_name)
-    void onClickUserName() {
-        Toast.makeText(this, "Click name", Toast.LENGTH_LONG).show();
     }
 }
