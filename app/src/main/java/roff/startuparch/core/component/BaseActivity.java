@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import butterknife.ButterKnife;
-import roff.startuparch.presentation.di.AppComponent;
-import roff.startuparch.presentation.di.AppComponentProvider;
+import roff.startuparch.core.di.component.ApplicationComponent;
+import roff.startuparch.core.di.component.ApplicationComponentProvider;
 
 /**
  * Created by wuyongbo on 16-3-22.
@@ -18,11 +18,18 @@ public class BaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getApplicationComponent().inject(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         ButterKnife.bind(this);
     }
 
-    //提供最顶级的Component
-    protected AppComponent getApplicationComponent() {
-        return ((AppComponentProvider)getApplication()).getAppComponent();
+    /**
+     * 提供Application级的Component
+     */
+    protected ApplicationComponent getApplicationComponent() {
+        return ((ApplicationComponentProvider)getApplication()).getApplicationComponent();
     }
 }

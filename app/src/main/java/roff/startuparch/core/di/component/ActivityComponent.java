@@ -5,6 +5,7 @@ import android.app.Activity;
 import dagger.Component;
 import roff.startuparch.core.di.annotation.PerActivity;
 import roff.startuparch.core.di.module.ActivityModule;
+import roff.startuparch.core.di.module.ApplicationModule;
 
 /**
  * Created by wuyongbo on 16-3-22.
@@ -20,7 +21,7 @@ import roff.startuparch.core.di.module.ActivityModule;
  */
 @PerActivity
 @Component(
-        dependencies = AppModule.class,
+        dependencies = ApplicationModule.class,
         modules = ActivityModule.class
 )
 public interface ActivityComponent {
