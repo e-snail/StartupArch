@@ -22,6 +22,9 @@
         <activity android:name=".features.user.UserListActivity">
         </activity>
 
+        <activity android:name=".features.doubanservice.DoubanServiceActivity" >
+        </activity>>
+
     </application>
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

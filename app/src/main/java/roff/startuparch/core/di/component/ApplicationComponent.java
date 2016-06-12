@@ -15,7 +15,6 @@ import roff.startuparch.AndroidApplication;
 import roff.startuparch.core.component.BaseActivity;
 import roff.startuparch.core.di.module.AndroidModule;
 import roff.startuparch.core.di.module.ApiModule;
-import roff.startuparch.core.di.module.ApplicationModule;
 
 /**
  * Created by wuyongbo on 16-6-8.

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import butterknife.OnClick;
 import roff.startuparch.core.component.BaseActivity;
+import roff.startuparch.features.doubanservice.DoubanServiceActivity;
 import roff.startuparch.features.githubservice.GithubServiceActivity;
 
 public class MainActivity extends BaseActivity {
@@ -17,7 +18,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.githubservice)
     void onClickGithubService() {
-        Intent intent = new Intent(this, GithubServiceActivity.class);
+        Intent intent = new Intent(this, DoubanServiceActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

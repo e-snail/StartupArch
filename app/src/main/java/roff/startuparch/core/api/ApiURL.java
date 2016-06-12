@@ -5,10 +5,10 @@ package roff.startuparch.core.api;
  */
 public enum ApiURL {
 
-    RELEASE("https://api.github.com/"),     //Release server
-    TEST("https://api.github.com/"),        //Testing server
+    RELEASE(URLConst.douban_server),     //Release server
+    TEST(URLConst.douban_server),        //Testing server
 
-    CURRENT("https://api.github.com/");
+    CURRENT(URLConst.douban_server);
 
     private final String url;
 
