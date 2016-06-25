@@ -10,6 +10,7 @@ import okhttp3.Response;
 
 /**
  * Created by wuyongbo on 16-6-25.
+ * 记录网络请求耗时的拦截器
  */
 public class TimeConsumingInterceptor implements Interceptor {
     final String TAG = TimeConsumingInterceptor.class.getSimpleName();
