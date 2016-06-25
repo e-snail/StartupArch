@@ -40,19 +40,17 @@ public class GithubServiceActivity extends BaseActivity {
 
         injectComponents();
 
-        setupViewPresenter();
+        bindViewPresenter();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        githubServicePresenter.getUserInfo("e-snail");
-        githubServicePresenter.getUserRepos("e-snail");
     }
 
-    private void setupViewPresenter() {
+    private void bindViewPresenter() {
         githubServicePresenter.setIGithubServiceView(githubServiceFragment);
+        githubServiceFragment.setPresenter(githubServicePresenter);
     }
 
     private void injectComponents() {

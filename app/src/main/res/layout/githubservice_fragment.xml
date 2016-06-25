@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/clickme"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Click me"
+        android:textSize="15sp"
+        android:layout_marginBottom="20dp" />
+
     <TextView
         android:id="@+id/login"
         android:layout_width="match_parent"

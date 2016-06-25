@@ -2,6 +2,8 @@ package roff.startuparch.core.api;
 
 import android.util.Log;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +16,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import roff.startuparch.BuildConfig;
+import roff.startuparch.core.api.interceptor.HttpSettingsInterceptor;
+import roff.startuparch.core.api.interceptor.TimeConsumingInterceptor;
+import roff.startuparch.core.api.interceptor.TraficMonitorInterceptor;
 import roff.startuparch.util.DeviceInfo;
 
 /**
@@ -27,8 +32,8 @@ public final class OKHttpBuilder {
     final static long MAX_CACHE_SIZE   = 16 * 1024 * 1024;  //http请求的缓存大小，16M
     final static int TIMEOUT_CONNECT   = 15 * 1000;         //请求超时时间
     //FIXME
-    final static int TIMEOUT_READ      = 20 * 1000;         //读文件超时???
-    final static int TIMEOUT_WRITE     = 20 * 1000;         //写文件超时???
+    final static int TIMEOUT_READ      = 20 * 1000;         //读文件超时
+    final static int TIMEOUT_WRITE     = 20 * 1000;         //写文件超时
 
     private OKHttpBuilder() {}
 
@@ -66,7 +71,7 @@ public final class OKHttpBuilder {
         /**
          * Log拦截器，OKHttp自带的
          */
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
                 Log.i(TAG, "------->" + message);
@@ -74,12 +79,17 @@ public final class OKHttpBuilder {
         });
 
         if (BuildConfig.DEBUG) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
                     .setLevel(HttpLoggingInterceptor.Level.BODY)
                     .setLevel(HttpLoggingInterceptor.Level.HEADERS);
         } else {
-            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
         }
+
+        /**
+         * stetho拦截器
+         */
+        StethoInterceptor stethoInterceptor = new StethoInterceptor();
 
         /**
          * 插入默认拦截器/缓存等
@@ -88,62 +98,11 @@ public final class OKHttpBuilder {
         okHttpClient.newBuilder()
                 .addInterceptor(new HttpSettingsInterceptor(osVersion, versionName, versionCode))
                 .addInterceptor(new TimeConsumingInterceptor())
-                .addInterceptor(logging)
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(stethoInterceptor)
+                .addInterceptor(new TraficMonitorInterceptor())
                 .cache(cache);
 
         return okHttpClient;
-    }
-
-    /**
-     * 网络请求默认设置拦截器
-     */
-    static class HttpSettingsInterceptor implements Interceptor {
-
-        String osVersion;
-        String versionName;
-        String versionCode;
-
-        public HttpSettingsInterceptor(final String osVersion, final String versionName, final String versionCode) {
-            this.osVersion = osVersion;
-            this.versionCode = versionCode;
-            this.versionName = versionName;
-        }
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            try {
-                HashMap<String, String> cookieMap = new HashMap<>();
-                cookieMap.put("IMEI", DeviceInfo.getInstance().getIMEI());
-
-                String cookieInfo = cookieMap.toString();
-
-                Request request = chain.request()
-                        .newBuilder()
-                        .addHeader("Accept-Encoding", "gzip, deflate")
-                        .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                        .addHeader("Connection", "keep-alive")
-                        .addHeader("Accept", "*/*")
-                        .addHeader("OSVersion", osVersion)
-                        .addHeader("VName", versionName)
-                        .addHeader("VCode", versionCode)
-                        .addHeader("Cookie", cookieInfo)
-                        .build();
-
-                return chain.proceed(request);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    /**
-     * 记录网络请求耗时的拦截器
-     */
-    static class TimeConsumingInterceptor implements Interceptor {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            return null;
-        }
     }
 }

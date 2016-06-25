@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,15 @@ public class GithubServiceFragment extends Fragment implements IGithubServiceVie
     IGithubServicePresenter presenter;
 
     public GithubServiceFragment() {
+    }
+
+    @BindView(R.id.clickme)
+    Button clickmeButton;
+
+    @OnClick(R.id.clickme)
+    void onClickMe(View view) {
+        presenter.getUserInfo("e-snail");
+        presenter.getUserRepos("e-snail");
     }
 
     @BindView(R.id.login)

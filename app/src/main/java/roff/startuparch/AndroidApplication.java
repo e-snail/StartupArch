@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
 import roff.startuparch.core.api.ApiURL;
@@ -29,6 +30,11 @@ public class AndroidApplication extends Application implements ApplicationCompon
 
         this.initializeInjector();
         this.initializeLeakDetection();
+
+        Stetho.newInitializerBuilder(this)
+                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                .build();
     }
 
     private void initializeInjector() {

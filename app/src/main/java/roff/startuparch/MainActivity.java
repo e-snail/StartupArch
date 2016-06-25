@@ -18,9 +18,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.githubservice)
     void onClickGithubService() {
-        Intent intent = new Intent(this, DoubanServiceActivity.class);
+        Intent intent = new Intent(this, GithubServiceActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
 }
