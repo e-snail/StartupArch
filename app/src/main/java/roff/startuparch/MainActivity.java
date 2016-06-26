@@ -5,10 +5,11 @@ import android.os.Bundle;
 
 import butterknife.OnClick;
 import roff.startuparch.core.component.BaseActivity;
-import roff.startuparch.features.doubanservice.DoubanServiceActivity;
 import roff.startuparch.features.githubservice.GithubServiceActivity;
 
 public class MainActivity extends BaseActivity {
+
+    final static String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

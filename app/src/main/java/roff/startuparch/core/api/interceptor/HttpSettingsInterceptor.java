@@ -45,6 +45,7 @@ public class HttpSettingsInterceptor implements Interceptor {
                     .build();
 
             return chain.proceed(request);
+
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -22,7 +22,7 @@ public class TrafficMonitorInterceptor implements Interceptor {
 
         Response response = chain.proceed(request);
 
-        Log.d(TAG, "request content =" + response.toString());
+        //TODO content length
 
         return response;
     }

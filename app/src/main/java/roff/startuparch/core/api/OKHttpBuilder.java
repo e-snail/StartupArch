@@ -1,25 +1,17 @@
 package roff.startuparch.core.api;
 
-import android.util.Log;
-
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import roff.startuparch.BuildConfig;
 import roff.startuparch.core.api.interceptor.HttpSettingsInterceptor;
 import roff.startuparch.core.api.interceptor.TimeConsumingInterceptor;
-import roff.startuparch.core.api.interceptor.TraficMonitorInterceptor;
-import roff.startuparch.util.DeviceInfo;
+import roff.startuparch.core.api.interceptor.TrafficMonitorInterceptor;
 
 /**
  * Created by wuyongbo on 16-6-8.
@@ -30,10 +22,9 @@ public final class OKHttpBuilder {
     final static String TAG = OKHttpBuilder.class.getSimpleName();
 
     final static long MAX_CACHE_SIZE   = 16 * 1024 * 1024;  //http请求的缓存大小，16M
-    final static int TIMEOUT_CONNECT   = 15 * 1000;         //请求超时时间
-    //FIXME
-    final static int TIMEOUT_READ      = 20 * 1000;         //读文件超时
-    final static int TIMEOUT_WRITE     = 20 * 1000;         //写文件超时
+    final static int TIMEOUT_CONNECT   = 15 ;         //请求超时时间
+    final static int TIMEOUT_READ      = 15;         //读文件超时
+    final static int TIMEOUT_WRITE     = 15;         //写文件超时
 
     private OKHttpBuilder() {}
 
@@ -43,12 +34,12 @@ public final class OKHttpBuilder {
      */
     private static OkHttpClient createDefaultOkHttpClient() {
 
-        final OkHttpClient client = new OkHttpClient();
-
-        client.newBuilder()
-                .connectTimeout(TIMEOUT_CONNECT, TimeUnit.MILLISECONDS)
-                .readTimeout(TIMEOUT_READ, TimeUnit.MILLISECONDS)
-                .writeTimeout(TIMEOUT_WRITE, TimeUnit.MILLISECONDS);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(TIMEOUT_CONNECT,    TimeUnit.SECONDS)
+                .readTimeout(TIMEOUT_READ,          TimeUnit.SECONDS)
+                .writeTimeout(TIMEOUT_WRITE,        TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
 
         return client;
     }
@@ -71,15 +62,11 @@ public final class OKHttpBuilder {
         /**
          * Log拦截器，OKHttp自带的
          */
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.i(TAG, "------->" + message);
-            }
-        });
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 
         if (BuildConfig.DEBUG) {
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+            loggingInterceptor
+                    .setLevel(HttpLoggingInterceptor.Level.BASIC)
                     .setLevel(HttpLoggingInterceptor.Level.BODY)
                     .setLevel(HttpLoggingInterceptor.Level.HEADERS);
         } else {
@@ -95,13 +82,15 @@ public final class OKHttpBuilder {
          * 插入默认拦截器/缓存等
          */
         OkHttpClient okHttpClient = createDefaultOkHttpClient();
-        okHttpClient.newBuilder()
+
+        okHttpClient = okHttpClient.newBuilder()
+                .addInterceptor(loggingInterceptor)
                 .addInterceptor(new HttpSettingsInterceptor(osVersion, versionName, versionCode))
                 .addInterceptor(new TimeConsumingInterceptor())
-                .addInterceptor(loggingInterceptor)
+                .addInterceptor(new TrafficMonitorInterceptor())
                 .addInterceptor(stethoInterceptor)
-                .addInterceptor(new TraficMonitorInterceptor())
-                .cache(cache);
+                .cache(cache)
+                .build();
 
         return okHttpClient;
     }

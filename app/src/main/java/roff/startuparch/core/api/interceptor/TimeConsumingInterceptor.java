@@ -15,7 +15,8 @@ import okhttp3.Response;
 public class TimeConsumingInterceptor implements Interceptor {
     final String TAG = TimeConsumingInterceptor.class.getSimpleName();
 
-    @Override public Response intercept(Interceptor.Chain chain) throws IOException {
+    @Override
+    public Response intercept(Interceptor.Chain chain) throws IOException {
         Request request = chain.request();
 
         long t1 = System.nanoTime();
